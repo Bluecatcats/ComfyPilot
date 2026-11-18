@@ -123,7 +123,7 @@ struct DiagnosticsSheet: View {
                         }
                     }
                     .frame(height: 320)
-                    .onChange(of: store.diagnostics.count) { _, _ in
+                    .onChange(of: store.diagnostics.count) { _ in
                         proxy.scrollTo("log-bottom", anchor: .bottom)
                     }
                     .onAppear {

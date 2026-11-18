@@ -71,7 +71,7 @@ struct RootView: View {
                     onOpen: { url in updates.open(url) }
                 )
             }
-            .onChange(of: store.pendingScreen) { _, target in
+            .onChange(of: store.pendingScreen) { target in
                 if target == "tasks" { route = .tasks }
             }
             // 连上后不再自动跳工作流列表：以前这样做，用户想改地址时会一直被拽走。
@@ -495,7 +495,7 @@ struct TasksScreen: View {
         // CI 截图用：-uiOpenArtifact 时，任务一出现产物就自动打开查看器
         // （模拟器点不了任务行里的「查看产物」）。
         .onAppear { maybeOpenArtifact() }
-        .onChange(of: completedArtifactCount) { _, _ in maybeOpenArtifact() }
+        .onChange(of: completedArtifactCount) { _ in maybeOpenArtifact() }
         .sheet(item: $sheet) { item in
             switch item {
             case .artifacts(let task):

@@ -394,7 +394,7 @@ struct WorkflowDetailScreen: View {
                         .padding(.top, 8)
                         .padding(.bottom, 16)
                     }
-                    .onChange(of: jumpNodeId) { _, target in
+                    .onChange(of: jumpNodeId) { target in
                         guard let target else { return }
                         // 展开要一帧才生效：稍晚一点再滚，否则滚到的是折叠时的高度。
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
@@ -459,7 +459,7 @@ struct WorkflowDetailScreen: View {
             }
         }
         .onAppear { store.openWorkflow(path: path) }
-        .onChange(of: store.workflowView?.graph?.nodes.count ?? 0) { _, count in
+        .onChange(of: store.workflowView?.graph?.nodes.count ?? 0) { count in
             // CI 点不了「连线」图标：带 -uiGraph 时等图数据到了自动弹出来。
             guard LaunchOptions.showGraph, count > 0, sheet == nil else { return }
             sheet = .graph(store.workflowView?.nodes.first?.id ?? 0)
@@ -1129,10 +1129,10 @@ struct FieldRow: View {
         }
         // 外部改动（上传回填、恢复默认参数）要回灌到输入框：
         // FieldRow 的 @State text 只在初始化时取一次值，不接这一下会一直显示旧文本。
-        .onChange(of: field.valueText) { _, _ in
+        .onChange(of: field.valueText) { _ in
             if !focused { text = store.fieldDisplayText(for: field) }
         }
-        .onChange(of: store.fieldDisplayRevision) { _, _ in
+        .onChange(of: store.fieldDisplayRevision) { _ in
             if !focused { text = store.fieldDisplayText(for: field) }
         }
         .onAppear {
@@ -1158,7 +1158,7 @@ struct FieldRow: View {
                 store.showToast("选择音频失败")
             }
         }
-        .onChange(of: pickedItem) { _, item in
+        .onChange(of: pickedItem) { item in
             guard let item else { return }
             Task {
                 if let data = try? await item.loadTransferable(type: Data.self) {
@@ -1320,7 +1320,7 @@ struct FieldRow: View {
                 .autocorrectionDisabled()
                 .focused($focused)
                 .onSubmit { commit() }
-                .onChange(of: focused) { _, active in
+                .onChange(of: focused) { active in
                     if !active { commit() }
                 }
                 .padding(.horizontal, 12)
